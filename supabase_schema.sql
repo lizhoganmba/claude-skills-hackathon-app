@@ -6,6 +6,7 @@ create table if not exists submissions (
   submitter_name text not null,
   submitter_team text not null,
   skill_name text not null,
+  category text not null,
   description text not null,
   potential_use_cases text not null,
   usage_instructions text not null,

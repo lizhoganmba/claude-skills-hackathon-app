@@ -14,6 +14,14 @@ const TEAMS = [
   'Other',
 ]
 
+const CATEGORIES = [
+  { key: 'client_deliverables', emoji: '📊', label: 'Client Deliverables', description: 'The output goes to clients: reports, briefs, decks, readouts' },
+  { key: 'data_analysis', emoji: '🔍', label: 'Data & Analysis', description: 'Insight work that informs deliverables but isn\'t one: market research, pattern detection' },
+  { key: 'internal_efficiency', emoji: '⚙️', label: 'Internal Efficiency', description: 'Automating internal workflows: tagging, cleanup, QA, admin' },
+  { key: 'sales_growth', emoji: '📈', label: 'Sales & Growth', description: 'Winning or expanding business: prospecting, competitive intel, pitch prep' },
+  { key: 'wildcard', emoji: '🧪', label: 'Wildcard / Other', description: 'Anything that doesn\'t fit the other categories' },
+]
+
 const ALL_JUDGES = ['Alykhan', 'Medha', 'Sam', 'Claude', 'Liz Testing']
 const REAL_JUDGES = ['Alykhan', 'Medha', 'Sam', 'Claude']
 
@@ -96,6 +104,7 @@ function SubmitMode() {
     submitter_name: '',
     submitter_team: '',
     skill_name: '',
+    category: '',
     description: '',
     potential_use_cases: '',
     usage_instructions: '',
@@ -116,7 +125,7 @@ function SubmitMode() {
       setStatus('error')
     } else {
       setStatus('success')
-      setForm({ submitter_name: '', submitter_team: '', skill_name: '', description: '', potential_use_cases: '', usage_instructions: '', sharepoint_url: '' })
+      setForm({ submitter_name: '', submitter_team: '', skill_name: '', category: '', description: '', potential_use_cases: '', usage_instructions: '', sharepoint_url: '' })
     }
   }
 
@@ -159,6 +168,16 @@ function SubmitMode() {
           <div className="form-row">
             <label>Skill Name</label>
             <input required value={form.skill_name} onChange={set('skill_name')} placeholder="e.g. /deep-research" />
+          </div>
+          <div className="form-row">
+            <label>Category</label>
+            <select required value={form.category} onChange={set('category')}>
+              <option value="">— Select a category —</option>
+              {CATEGORIES.map(c => <option key={c.key} value={c.key}>{c.emoji} {c.label}</option>)}
+            </select>
+            {form.category && (
+              <span className="field-hint">{CATEGORIES.find(c => c.key === form.category)?.description}</span>
+            )}
           </div>
           <div className="form-row">
             <label>Description</label>
@@ -339,6 +358,12 @@ function JudgeMode({ judgeName }) {
                 onClick={() => { setSelected(sub.id); setTab('score') }}
               >
                 <div className="sidebar-skill">{sub.skill_name}</div>
+                {sub.category && (
+                  <div className="sidebar-meta">
+                    {CATEGORIES.find(c => c.key === sub.category)?.emoji}{' '}
+                    {CATEGORIES.find(c => c.key === sub.category)?.label || sub.category}
+                  </div>
+                )}
                 <div className="sidebar-badges">
                   {mine && <span className="badge badge-scored">You scored</span>}
                   {done && <span className="badge badge-done">All done</span>}
@@ -377,6 +402,12 @@ function SubmissionView({ submission, judgeName, allScores, allJudgesDone, onSav
       <div className="submission-header">
         <div className="submission-title-row">
           <h2>{submission.skill_name}</h2>
+          {submission.category && (
+            <span className="category-badge">
+              {CATEGORIES.find(c => c.key === submission.category)?.emoji}{' '}
+              {CATEGORIES.find(c => c.key === submission.category)?.label || submission.category}
+            </span>
+          )}
         </div>
         <a href={submission.sharepoint_url} target="_blank" rel="noreferrer" className="btn-secondary">
           Open Skill File ↗
@@ -462,12 +493,36 @@ function CompareTab({ submissions, allScores, allJudgesDone, avgScore, subScores
         <div className="empty-state">No submissions fully scored yet.</div>
       )}
 
+      {ranked.length > 0 && (
+        <div className="category-winners">
+          <h3>Category Winners</h3>
+          {CATEGORIES.map(cat => {
+            const inCat = ranked.filter(s => s.category === cat.key)
+            if (!inCat.length) return null
+            const winner = inCat[0]
+            return (
+              <div key={cat.key} className="category-winner-row">
+                <span className="category-winner-cat">{cat.emoji} {cat.label}</span>
+                <span className="category-winner-skill">{winner.skill_name}</span>
+                <span className="category-winner-score">{winner.avg.toFixed(1)}</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
       {ranked.map((sub, i) => (
         <div key={sub.id} className="compare-card">
           <div className="compare-rank">#{i + 1}</div>
           <div className="compare-body">
             <div className="compare-title-row">
               <span className="compare-skill">{sub.skill_name}</span>
+              {sub.category && (
+                <span className="category-badge">
+                  {CATEGORIES.find(c => c.key === sub.category)?.emoji}{' '}
+                  {CATEGORIES.find(c => c.key === sub.category)?.label || sub.category}
+                </span>
+              )}
               <span className="compare-avg">{sub.avg.toFixed(1)}<small>/100</small></span>
             </div>
             <div className="compare-criteria">
