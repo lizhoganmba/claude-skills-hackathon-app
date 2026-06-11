@@ -84,6 +84,7 @@ function JudgeModal({ onSelect }) {
 function SubmitMode() {
   const [form, setForm] = useState({
     submitter_name: '',
+    submitter_team: '',
     skill_name: '',
     description: '',
     potential_use_cases: '',
@@ -105,7 +106,7 @@ function SubmitMode() {
       setStatus('error')
     } else {
       setStatus('success')
-      setForm({ submitter_name: '', skill_name: '', description: '', potential_use_cases: '', usage_instructions: '', sharepoint_url: '' })
+      setForm({ submitter_name: '', submitter_team: '', skill_name: '', description: '', potential_use_cases: '', usage_instructions: '', sharepoint_url: '' })
     }
   }
 
@@ -137,6 +138,10 @@ function SubmitMode() {
           <div className="form-row">
             <label>Your Name</label>
             <input required value={form.submitter_name} onChange={set('submitter_name')} placeholder="e.g. Alykhan" />
+          </div>
+          <div className="form-row">
+            <label>Your Team</label>
+            <input required value={form.submitter_team} onChange={set('submitter_team')} placeholder="e.g. Sales, Client Success, Product" />
           </div>
           <div className="form-row">
             <label>Skill Name</label>

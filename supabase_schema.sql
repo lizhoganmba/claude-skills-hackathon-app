@@ -4,6 +4,7 @@
 create table if not exists submissions (
   id uuid primary key default gen_random_uuid(),
   submitter_name text not null,
+  submitter_team text not null,
   skill_name text not null,
   description text not null,
   potential_use_cases text not null,
