@@ -15,8 +15,8 @@ const TEAMS = [
 ]
 
 const CATEGORIES = [
-  { key: 'client_deliverables', emoji: '📊', label: 'Client Deliverables', description: 'The output goes to clients: reports, briefs, decks, readouts' },
-  { key: 'data_analysis', emoji: '🔍', label: 'Data & Analysis', description: 'Insight work that informs deliverables but isn\'t one: market research, pattern detection' },
+  { key: 'client_deliverables', emoji: '📊', label: 'Client Deliverables', description: 'The skill\'s output goes to the client: reports, briefs, decks, readouts' },
+  { key: 'data_analysis', emoji: '🔍', label: 'Data & Analysis', description: 'Behind-the-scenes insight work that informs a deliverable but isn\'t itself sent to clients: market research, pattern detection, trend spotting' },
   { key: 'internal_efficiency', emoji: '⚙️', label: 'Internal Efficiency', description: 'Automating internal workflows: tagging, cleanup, QA, admin' },
   { key: 'sales_growth', emoji: '📈', label: 'Sales & Growth', description: 'Winning or expanding business: prospecting, competitive intel, pitch prep' },
   { key: 'wildcard', emoji: '🧪', label: 'Wildcard / Other', description: 'Anything that doesn\'t fit the other categories' },
@@ -175,9 +175,14 @@ function SubmitMode() {
               <option value="">— Select a category —</option>
               {CATEGORIES.map(c => <option key={c.key} value={c.key}>{c.emoji} {c.label}</option>)}
             </select>
-            {form.category && (
-              <span className="field-hint">{CATEGORIES.find(c => c.key === form.category)?.description}</span>
-            )}
+            <div className="category-legend">
+              {CATEGORIES.map(c => (
+                <div key={c.key} className={`category-legend-row ${form.category === c.key ? 'selected' : ''}`}>
+                  <span className="category-legend-label">{c.emoji} {c.label}</span>
+                  <span className="category-legend-desc">{c.description}</span>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="form-row">
             <label>Description</label>
