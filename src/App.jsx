@@ -321,7 +321,6 @@ function JudgeMode({ judgeName }) {
                 onClick={() => { setSelected(sub.id); setTab('score') }}
               >
                 <div className="sidebar-skill">{sub.skill_name}</div>
-                <div className="sidebar-meta">{sub.submitter_name}</div>
                 <div className="sidebar-badges">
                   {mine && <span className="badge badge-scored">You scored</span>}
                   {done && <span className="badge badge-done">All done</span>}
@@ -360,7 +359,6 @@ function SubmissionView({ submission, judgeName, allScores, allJudgesDone, onSav
       <div className="submission-header">
         <div className="submission-title-row">
           <h2>{submission.skill_name}</h2>
-          <span className="submitter-label">by {submission.submitter_name}</span>
         </div>
         <a href={submission.sharepoint_url} target="_blank" rel="noreferrer" className="btn-secondary">
           Open Skill File ↗
@@ -452,7 +450,6 @@ function CompareTab({ submissions, allScores, allJudgesDone, avgScore, subScores
           <div className="compare-body">
             <div className="compare-title-row">
               <span className="compare-skill">{sub.skill_name}</span>
-              <span className="compare-submitter">by {sub.submitter_name}</span>
               <span className="compare-avg">{sub.avg.toFixed(1)}<small>/100</small></span>
             </div>
             <div className="compare-criteria">
@@ -480,7 +477,7 @@ function CompareTab({ submissions, allScores, allJudgesDone, avgScore, subScores
             const done = subScores(sub).filter(s => REAL_JUDGES.includes(s.judge_name)).length
             return (
               <div key={sub.id} className="pending-row">
-                <span>{sub.skill_name} <small>by {sub.submitter_name}</small></span>
+                <span>{sub.skill_name}</span>
                 <span className="pending-count">{done}/{REAL_JUDGES.length} judges</span>
               </div>
             )
