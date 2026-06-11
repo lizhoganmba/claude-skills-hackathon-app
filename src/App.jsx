@@ -4,6 +4,17 @@ import './App.css'
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
+const TEAMS = [
+  'Sales & Marketing',
+  'Client Success',
+  'Operations',
+  'Dev Team',
+  'Tableau Team',
+  'Reporting Team',
+  'Product',
+  'Other',
+]
+
 const ALL_JUDGES = ['Alykhan', 'Medha', 'Sam', 'Claude', 'Liz Testing']
 const REAL_JUDGES = ['Alykhan', 'Medha', 'Sam', 'Claude']
 
@@ -141,7 +152,10 @@ function SubmitMode() {
           </div>
           <div className="form-row">
             <label>Your Team</label>
-            <input required value={form.submitter_team} onChange={set('submitter_team')} placeholder="e.g. Sales, Client Success, Product" />
+            <select required value={form.submitter_team} onChange={set('submitter_team')}>
+              <option value="">— Select your team —</option>
+              {TEAMS.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
           </div>
           <div className="form-row">
             <label>Skill Name</label>
