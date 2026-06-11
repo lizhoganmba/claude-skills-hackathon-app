@@ -8,10 +8,9 @@ const TEAMS = [
   'Sales & Marketing',
   'Client Success',
   'Operations',
-  'Dev Team',
+  'Dev & Product',
   'Tableau Team',
   'Reporting Team',
-  'Product',
   'Other',
 ]
 
