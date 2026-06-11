@@ -22,6 +22,8 @@ const CATEGORIES = [
   { key: 'wildcard', emoji: '🧪', label: 'Wildcard / Other', description: 'Anything that doesn\'t fit the other categories' },
 ]
 
+const JUDGE_PASSWORD = 'PRskills2026'
+
 const ALL_JUDGES = ['Alykhan', 'Medha', 'Sam', 'Claude', 'Liz Testing']
 const REAL_JUDGES = ['Alykhan', 'Medha', 'Sam', 'Claude']
 
@@ -73,25 +75,46 @@ function weightedScore(scores) {
 
 // ─── Judge Modal ──────────────────────────────────────────────────────────────
 
-function JudgeModal({ onSelect }) {
+function JudgeModal({ onSelect, onCancel }) {
   const [selected, setSelected] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(false)
+
+  function handleEnter() {
+    if (password !== JUDGE_PASSWORD) {
+      setError(true)
+      return
+    }
+    onSelect(selected)
+  }
+
   return (
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-logo">PR</div>
-        <h2>Welcome to the Skills Hackathon</h2>
-        <p>Select your name to begin judging.</p>
+        <h2>Judges Only</h2>
+        <p>Enter the judge password and select your name.</p>
+        <input
+          type="password"
+          className="modal-password"
+          placeholder="Judge password"
+          value={password}
+          onChange={e => { setPassword(e.target.value); setError(false) }}
+          onKeyDown={e => { if (e.key === 'Enter' && selected && password) handleEnter() }}
+        />
+        {error && <div className="alert alert-error">Incorrect password.</div>}
         <select value={selected} onChange={e => setSelected(e.target.value)}>
           <option value="">— Choose your name —</option>
           {ALL_JUDGES.map(j => <option key={j} value={j}>{j}</option>)}
         </select>
         <button
           className="btn-primary"
-          disabled={!selected}
-          onClick={() => onSelect(selected)}
+          disabled={!selected || !password}
+          onClick={handleEnter}
         >
           Enter as {selected || '…'}
         </button>
+        <button className="btn-text" onClick={onCancel}>Cancel</button>
       </div>
     </div>
   )
@@ -605,7 +628,7 @@ export default function App() {
         </div>
       </nav>
 
-      {showJudgeModal && <JudgeModal onSelect={handleJudgeSelect} />}
+      {showJudgeModal && <JudgeModal onSelect={handleJudgeSelect} onCancel={() => setShowJudgeModal(false)} />}
 
       {mode === 'submit' && <SubmitMode />}
       {mode === 'judge' && judgeName && <JudgeMode judgeName={judgeName} />}

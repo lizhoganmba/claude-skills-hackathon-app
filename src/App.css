@@ -125,6 +125,27 @@ body {
 .modal h2 { font-size: 20px; font-weight: 700; color: var(--navy); }
 .modal p { color: var(--gray-600); font-size: 14px; }
 
+.modal-password {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: var(--gray-900);
+}
+.modal-password:focus { outline: none; border-color: var(--indigo); }
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--gray-400);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-text:hover { color: var(--gray-600); }
+
 .modal select {
   width: 100%;
   padding: 10px 14px;
